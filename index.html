@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeMercy - Antivírus e Proteção contra Cyberbullying</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="app-header">
+    <div class="container nav-wrapper">
+      <div class="brand-logo">
+        <div class="logo-icon" style="background: #f8fafc; padding: 4px; display: flex; align-items: center; justify-content: center;">
+          <img src="https://i.pinimg.com/736x/ec/46/c5/ec46c543a969e983b2c17673104eb867.jpg" class="capacete">
+        </div>
+        <div>
+          <span class="brand-title">SafeMercy</span>
+          <span class="brand-badge">
+            <a href="https://canva.link/d8l0zrasa17lsni" class="btn-link" target="_blank" style="color: #ffffff;">Apresentação do Canva</a>
+          </span>
+        </div>
+      </div>
+      
+      <nav class="nav-tabs">
+        <button onclick="switchTab('scanner')" id="tab-scanner" class="tab-btn active">
+          <i class="fa-solid fa-virus-slash" style="color: var(--cyan-main);"></i>Scanner Antivírus
+        </button>
+        <button onclick="switchTab('toxicity')" id="tab-toxicity" class="tab-btn">
+          <i class="fa-solid fa-comment-slash" style="color: var(--rose-main);"></i>Detector de Cyberbullying
+        </button>
+        <button onclick="switchTab('education')" id="tab-education" class="tab-btn">
+          <i class="fa-solid fa-graduation-cap" style="color: var(--amber-main);"></i>Guia de Apoio
+        </button>
+      </nav>
+
+      <button onclick="toggleMobileMenu()" class="mobile-menu-btn">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="mobile-nav">
+      <button onclick="switchTab('scanner'); toggleMobileMenu()">
+        <i class="fa-solid fa-virus-slash" style="color: var(--cyan-main); margin-right: 0.5rem;"></i>Scanner Antivírus
+      </button>
+      <button onclick="switchTab('toxicity'); toggleMobileMenu()">
+        <i class="fa-solid fa-comment-slash" style="color: var(--rose-main); margin-right: 0.5rem;"></i>Detector de Cyberbullying
+      </button>
+      <button onclick="switchTab('education'); toggleMobileMenu()">
+        <i class="fa-solid fa-graduation-cap" style="color: var(--amber-main); margin-right: 0.5rem;"></i>Guia de Apoio
+      </button>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top: 2rem; padding-bottom: 2rem; flex: 1;">
+    
+    <section class="banner-card">
+      <div class="banner-watermark">
+        <i class="fa-solid fa-shield-cat"></i>
+      </div>
+      <div style="position: relative; z-index: 1;">
+        <div class="banner-tag">
+          <i class="fa-solid fa-link"></i>
+          <span>Relação entre Código Malicioso e Violência Virtual</span>
+        </div>
+        <h1 class="banner-title">
+          Proteja seus Dispositivos e sua Integridade Emocional
+        </h1>
+        <p class="banner-desc">
+          Muitos ataques de cyberbullying iniciam com infecções por vírus, keyloggers ou spywares. 
+          Agressores enviam arquivos com vírus para invadir computadores, roubar senhas de redes sociais, vazar fotos e chantagear as vítimas. 
+          Monitore ameaças de código e de assédio para manter sua rotina online protegida.
+        </p>
+      </div>
+    </section>
+
+    <section id="sec-scanner" class="tab-content">
+      <div class="grid-3col">
+        <div class="glass-card">
+          <h2>Scanner de Arquivos & Links Suspeitos</h2>
+          <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+            Analise mensagens, anexos e links recebidos durante interações em jogos ou redes sociais.
+          </p>
+          
+          <div>
+            <div id="drop-zone" onclick="document.getElementById('file-input').click()" class="drop-zone">
+              <input type="file" id="file-input" style="display: none;" onchange="handleFileSelect(event)">
+              <div class="drop-icon-circle">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <p style="color: var(--text-white); font-weight: 600; font-size: 0.875rem;">Clique para selecionar ou arraste um arquivo suspeito</p>
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Suporta: (.exe, .scr, .zip, .apk, .pdf, .png)</p>
+            </div>
+
+            <div class="url-input-group">
+              <div class="input-wrapper">
+                <i class="fa-solid fa-link input-icon"></i>
+                <input type="url" id="url-input" placeholder="Ou cole aqui um link/URL suspeito recebido..." class="custom-input custom-input-icon">
+              </div>
+              <button onclick="startUrlScan()" class="btn btn-cyan">
+                <i class="fa-solid fa-magnifying-glass"></i> Escanear Link
+              </button>
+            </div>
+          </div>
+
+          <div id="scan-progress" class="scan-progress-box hidden">
+            <div style="display: flex; justify-content: space-between; font-size: 0.875rem;">
+              <span id="scan-status-text" style="color: var(--cyan-main); font-weight: 500;">
+                <i class="fa-solid fa-circle-notch fa-spin"></i> Verificando assinaturas de vírus...
+              </span>
+              <span id="scan-percentage" style="font-weight: 700; color: var(--text-muted);">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div id="scan-bar" class="progress-bar-fill"></div>
+            </div>
+            <div id="scan-log" class="scan-log"></div>
+          </div>
+
+          <div id="scan-result" class="hidden"></div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div class="glass-card">
+            <h3 style="color: #fff; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">
+              <i class="fa-solid fa-bug" style="color: var(--rose-main); margin-right: 0.5rem;"></i>
+              Ameaças Conectadas ao Cyberbullying
+            </h3>
+            
+            <div class="info-card">
+              <p class="info-title" style="color: var(--rose-main);">Keyloggers & Spywares</p>
+              <p style="font-size: 0.75rem;">Capturam senhas digitadas para roubo de contas e personificação de identidade.</p>
+            </div>
+
+            <div class="info-card">
+              <p class="info-title" style="color: var(--amber-main);">Ransomware de Chantagem</p>
+              <p style="font-size: 0.75rem;">Bloqueia arquivos da vítima exigindo fotos, dinheiro ou favores sob ameaça.</p>
+            </div>
+
+            <div class="info-card">
+              <p class="info-title" style="color: var(--cyan-main);">Phishing de Doxxing</p>
+              <p style="font-size: 0.75rem;">Links falsos projetados para obter o endereço IP e localização física da vítima.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="sec-toxicity" class="tab-content hidden">
+      <div class="glass-card">
+        <div style="max-width: 800px; margin-bottom: 1.5rem;">
+          <h2 style="color: #fff; font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">
+            <i class="fa-solid fa-heart-crack" style="color: var(--rose-main); margin-right: 0.5rem;"></i>
+            Analisador de Cyberbullying & Discurso Tóxico
+          </h2>
+          <p style="font-size: 0.875rem; color: var(--text-muted);">
+            Cole abaixo trechos de mensagens ou comentários hostis para obter uma avaliação de risco e recomendações de defesa.
+          </p>
+        </div>
+
+        <div class="grid-2col">
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Mensagem a ser analisada:</label>
+            <textarea id="toxicity-text" class="custom-textarea" placeholder="Exemplo: 'Se você não sair da partida agora, vamos divulgar seu endereço...'"></textarea>
+            
+            <div class="sample-pills">
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Exemplos:</span>
+              <button onclick="setSampleToxicity(1)" class="pill-btn">Ameaça de Doxxing</button>
+              <button onclick="setSampleToxicity(2)" class="pill-btn">Insultos & Exclusão</button>
+              <button onclick="setSampleToxicity(3)" class="pill-btn">Chantagem</button>
+            </div>
+
+            <button onclick="analyzeToxicity()" id="btn-analyze-tox" class="btn btn-rose" style="width: 100%; margin-top: 0.5rem;">
+              <i class="fa-solid fa-microchip"></i> Analisar Mensagem com IA
+            </button>
+          </div>
+
+          <div id="toxicity-output" class="output-console" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="width: 4rem; height: 4rem; border-radius: 9999px; background-color: var(--bg-main); display: flex; align-items: center; justify-content: center; color: var(--text-muted); margin-bottom: 0.75rem;">
+              <i class="fa-solid fa-comment-dots" style="font-size: 1.75rem;"></i>
+            </div>
+            <p style="font-size: 0.875rem; color: var(--text-muted); text-align: center;">Aguardando inserção de texto para análise heurística...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sec-education" class="tab-content hidden">
+      <div class="grid-2col">
+        <div class="glass-card">
+          <h2 style="color: #fff; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">
+            <i class="fa-solid fa-shield-cat" style="color: var(--amber-main); margin-right: 0.5rem;"></i>
+            Protocolo de Defesa Técnica & Pessoal
+          </h2>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.875rem;">
+            <div style="display: flex; gap: 0.75rem; background-color: rgba(2, 6, 23, 0.5); padding: 0.875rem; border-radius: 0.75rem;">
+              <div style="width: 2rem; height: 2rem; border-radius: 9999px; background-color: rgba(245, 158, 11, 0.2); color: var(--amber-main); display: flex; align-items: center; justify-content: center; font-weight: 700;">1</div>
+              <div>
+                <strong style="color: var(--text-white);">Preserve as Provas</strong>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Tire prints com data, hora e link do perfil do agressor.</p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; background-color: rgba(2, 6, 23, 0.5); padding: 0.875rem; border-radius: 0.75rem;">
+              <div style="width: 2rem; height: 2rem; border-radius: 9999px; background-color: rgba(6, 182, 212, 0.2); color: var(--cyan-main); display: flex; align-items: center; justify-content: center; font-weight: 700;">2</div>
+              <div>
+                <strong style="color: var(--text-white);">Execute Limpeza de Sistema</strong>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Rode antivírus e ative a verificação em duas etapas (2FA).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h2 style="color: #fff; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">
+              <i class="fa-solid fa-headset" style="color: var(--cyan-main); margin-right: 0.5rem;"></i>
+              Canais Oficiais de Ajuda (Brasil)
+            </h2>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <a href="https://new.safernet.org.br/helpline" target="_blank" style="text-decoration: none; color: inherit;">
+                <div class="info-card">
+                  <strong style="color: var(--cyan-main); font-size: 0.875rem;">SaferNet Brasil - Helpline</strong>
+                  <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Atendimento psicossocial gratuito.</p>
+                </div>
+              </a>
+              <div class="info-card">
+                <strong style="color: var(--purple-main); font-size: 0.875rem;">Disque 100 (Direitos Humanos)</strong>
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Proteção contra violência e intimidação.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast">
+    <span id="toast-icon"></span>
+    <span id="toast-msg" style="font-size: 0.875rem; font-weight: 500;"></span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
